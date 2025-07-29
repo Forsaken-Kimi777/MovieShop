@@ -25,7 +25,7 @@ namespace MovieShopMVC.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            _movieService = new MovieService();
+            //_movieService = new MovieService();
             //method(int x, IMovieService: movieService)
             //var movieService = new MovieService();
             //method(3, movieService)

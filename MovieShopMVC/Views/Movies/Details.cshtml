@@ -1,12 +1,92 @@
-﻿@model ApplicationCore.Models.MovieDetailModel;
+﻿@model ApplicationCore.Models.MovieDetailModel
 
-<h1>
-    @Model.Title
-</h1>
+<style>
+    #detailsbackimg {
+        background-image: url("@Model.BackdropUrl");
+        background-size: auto auto;
+    }
 
-<h3>
-    @Model.Overview
-</h3>
+    @{
+        string releaseYear = Model.ReleaseDate.HasValue ? Model.ReleaseDate.Value.Year.ToString() : "N/A";
+        string releaseDate = Model.ReleaseDate.HasValue ? Model.ReleaseDate.Value.ToShortDateString() : "N/A";
+        decimal boxOffice = Math.Round(Model.Revenue.GetValueOrDefault(), 2);
+        decimal budget = Math.Round(Model.Budget.GetValueOrDefault(), 2);
+        string ratingDisplay = Model.Rating.HasValue ? Model.Rating.Value.ToString("0.0") : "N/A";
+    }
+</style>
 
+<div>
+    <div class="container-fluid">
+        <div class="row" id="detailsbackimg">
+            <div class="col-3 ps-0">
+                <img class="img-fluid" src="@Model.PosterUrl" />
+            </div>
 
+            <div class="col-6">
+                <p class="fs-2 text-white">@Model.Title</p>
+                <p class="fs-6 text-secondary">@Model.Tagline</p>
+                <span class="fs-6 text-secondary">@Model.RunTime m | @releaseYear</span>
+                @foreach (var genre in Model.Genres)
+                {
+                    <span class="badge bg-secondary">@genre.Name</span>
+                }
+                <div>
+                    <h3><span class="badge bg-success">@ratingDisplay</span></h3>
+                </div>
+                <p class="text-white">
+                    @Model.Overview
+                </p>
+            </div>
 
+            <div class="col-3 position-relative pt-5">
+                <button class="btn btn-dark w-100" type="button">
+                    <!-- icon omitted for brevity -->
+                    Review
+                </button>
+                <br /><br />
+                <button class="btn btn-light w-100" type="button">BUY $@Model.Price</button>
+            </div>
+        </div>
+
+        <div>
+            <div class="row mt-3">
+                <div class="col-3 ps-0">
+                    <h3>MOVIE FACTS</h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Release Date <span class="badge rounded-pill bg-dark">@releaseDate</span></li>
+                        <li class="list-group-item">Run Time <span class="badge rounded-pill bg-dark">@Model.RunTime</span></li>
+                        <li class="list-group-item">Box Office <span class="badge rounded-pill bg-dark">$@boxOffice</span></li>
+                        <li class="list-group-item">Budget <span class="badge rounded-pill bg-dark">$@budget</span></li>
+                    </ul>
+                    <br />
+                    <h3>Trailer</h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">🎬 Inception</li>
+                    </ul>
+                </div>
+
+                <div class="col-6">
+                    <h3>CAST</h3>
+                    <ul class="list-group list-group-flush borderless">
+                        @foreach (var cast in Model.Casts)
+                        {
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img class="w-50" src="@cast.ProfilePath" />
+                                    </div>
+                                    <div class="col-6">
+                                        <span>@cast.Name</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>@cast.Character</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
